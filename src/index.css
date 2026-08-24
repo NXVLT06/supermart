@@ -1,0 +1,538 @@
+/* ============================================================
+   src/index.css — Smart Shopping Trolley Global Styles
+   Black & White ink-press aesthetic with smooth animations
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ── Reset & Base ─────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink-black:    #0a0a0a;
+  --ink-dark:     #1a1a1a;
+  --ink-mid:      #3a3a3a;
+  --ink-light:    #6b6b6b;
+  --ink-faint:    #9a9a9a;
+  --paper-white:  #ffffff;
+  --paper-cream:  #fafafa;
+  --paper-light:  #f4f4f4;
+  --paper-mid:    #e8e8e8;
+  --border-soft:  #e0e0e0;
+  --shadow-sm:    0 1px 4px rgba(0,0,0,0.06);
+  --shadow-md:    0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg:    0 12px 40px rgba(0,0,0,0.14);
+  --radius-sm:    6px;
+  --radius-md:    12px;
+  --radius-lg:    20px;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+  --transition:   all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--paper-cream);
+  color: var(--ink-black);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar         { width: 5px; height: 5px; }
+::-webkit-scrollbar-track   { background: var(--paper-light); }
+::-webkit-scrollbar-thumb   { background: var(--ink-faint); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-mid); }
+
+/* ── Typography ───────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  color: var(--ink-black);
+  letter-spacing: -0.02em;
+}
+
+code, pre, .mono {
+  font-family: var(--font-mono);
+}
+
+/* ── Keyframe Animations ──────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes inkDrop {
+  0%   { transform: scale(0); opacity: 0.8; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+@keyframes progressPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(26,26,26,0.2); }
+  50%       { box-shadow: 0 0 0 8px rgba(26,26,26,0); }
+}
+
+@keyframes checkmark {
+  0%   { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+/* ── Animation Utility Classes ────────────────────────────── */
+.animate-fadeIn      { animation: fadeIn 0.4s ease both; }
+.animate-fadeInUp    { animation: fadeInUp 0.5s ease both; }
+.animate-slideLeft   { animation: slideInLeft 0.4s ease both; }
+.animate-slideRight  { animation: slideInRight 0.4s ease both; }
+.animate-pulse       { animation: pulse 2s ease-in-out infinite; }
+
+.delay-100 { animation-delay: 0.1s; }
+.delay-200 { animation-delay: 0.2s; }
+.delay-300 { animation-delay: 0.3s; }
+.delay-400 { animation-delay: 0.4s; }
+
+/* ── Page Layout ──────────────────────────────────────────── */
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-cream);
+}
+
+.page-center {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,0,0,0.03) 0%, transparent 70%),
+    var(--paper-cream);
+}
+
+/* ── Cards & Surfaces ─────────────────────────────────────── */
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.6);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.ink-card {
+  background: var(--paper-white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.ink-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* ── Brand Header ─────────────────────────────────────────── */
+.brand-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.brand-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--ink-black);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.brand-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink-black);
+  letter-spacing: -0.03em;
+}
+
+.brand-subtitle {
+  font-size: 13px;
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+/* ── Receipt Styles ───────────────────────────────────────── */
+.receipt-container {
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.receipt-header {
+  text-align: center;
+  padding: 24px 0 16px;
+  border-bottom: 2px dashed var(--border-soft);
+  margin-bottom: 16px;
+}
+
+.receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 2px solid var(--ink-black);
+  margin-top: 8px;
+}
+
+.receipt-total-label {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink-black);
+}
+
+.receipt-total-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--ink-black);
+  font-family: var(--font-mono);
+  letter-spacing: -0.04em;
+}
+
+/* ── Progress Section ─────────────────────────────────────── */
+.progress-section {
+  text-align: center;
+  padding: 24px;
+  background: var(--paper-light);
+  border-radius: var(--radius-md);
+  margin-top: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.02) 0%, transparent 60%);
+}
+
+.progress-label {
+  font-size: 13px;
+  color: var(--ink-light);
+  margin-top: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* ── Status Badges ────────────────────────────────────────── */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+/* ── Supervisor Dashboard ─────────────────────────────────── */
+.supervisor-header {
+  background: var(--ink-black);
+  color: var(--paper-white);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.supervisor-header-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--paper-white);
+  letter-spacing: -0.02em;
+}
+
+.sse-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+}
+
+.sse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #52c41a;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.sse-dot.disconnected {
+  background: #ff4d4f;
+}
+
+/* ── Trolley Card Grid ────────────────────────────────────── */
+.trolley-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  padding: 20px;
+}
+
+.trolley-card {
+  background: var(--paper-white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 18px;
+  transition: var(--transition);
+  animation: fadeInUp 0.35s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+.trolley-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--ink-black);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.trolley-card:hover::after {
+  transform: scaleX(1);
+}
+
+.trolley-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.trolley-id {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  margin-bottom: 6px;
+}
+
+.trolley-total {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink-black);
+  font-family: var(--font-mono);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  margin: 8px 0;
+}
+
+.trolley-meta {
+  font-size: 12px;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* ── Stat Cards ───────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  padding: 20px 20px 0;
+}
+
+.stat-card {
+  background: var(--paper-white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.stat-card:hover { box-shadow: var(--shadow-sm); }
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--ink-black);
+  font-family: var(--font-mono);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+/* ── Review Feed ──────────────────────────────────────────── */
+.review-feed {
+  padding: 0 20px 20px;
+}
+
+.review-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-soft);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.review-item:last-child { border-bottom: none; }
+
+/* ── Login Screen ─────────────────────────────────────────── */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      rgba(0,0,0,0.04) 39px,
+      rgba(0,0,0,0.04) 40px
+    ),
+    var(--paper-cream);
+}
+
+.login-card {
+  background: var(--paper-white);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  padding: 48px;
+  width: 360px;
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.5s ease both;
+}
+
+/* ── Thank You Screen ─────────────────────────────────────── */
+.thankyou-container {
+  text-align: center;
+  padding: 40px 20px;
+  animation: fadeInUp 0.6s ease both;
+}
+
+.thankyou-checkmark {
+  width: 80px;
+  height: 80px;
+  background: var(--ink-black);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  animation: inkDrop 0.6s ease both;
+  color: white;
+  font-size: 36px;
+}
+
+/* ── Gate Controls ────────────────────────────────────────── */
+.gate-controls {
+  padding: 20px;
+  background: var(--paper-light);
+  border-radius: var(--radius-md);
+  margin: 0 20px 20px;
+  border: 1px solid var(--border-soft);
+}
+
+/* ── Mobile Responsive ────────────────────────────────────── */
+@media (max-width: 640px) {
+  .receipt-container { max-width: 100%; }
+  .receipt-total-amount { font-size: 22px; }
+  .login-card { width: 90%; padding: 32px 24px; }
+  .trolley-grid { grid-template-columns: 1fr; padding: 12px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); padding: 12px 12px 0; }
+  .supervisor-header { padding: 12px 16px; }
+}
+
+/* ── Ant Design Overrides ─────────────────────────────────── */
+.ant-table-wrapper .ant-table { background: transparent; }
+.ant-table-thead > tr > th {
+  background: var(--paper-light) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.06em !important;
+  font-weight: 600 !important;
+  color: var(--ink-faint) !important;
+}
+
+.ant-progress-circle .ant-progress-text {
+  font-family: var(--font-mono) !important;
+  font-weight: 700 !important;
+}
+
+.ant-btn-primary {
+  background: var(--ink-black) !important;
+  border-color: var(--ink-black) !important;
+}
+.ant-btn-primary:hover {
+  background: var(--ink-mid) !important;
+  border-color: var(--ink-mid) !important;
+}
+
+.ant-rate-star-full .ant-rate-star-first,
+.ant-rate-star-full .ant-rate-star-second {
+  color: var(--ink-black) !important;
+}
+
+.ant-tag { font-family: var(--font-mono); font-size: 11px; }
+
+/* Loading shimmer skeleton override */
+.ant-skeleton-element .ant-skeleton-input,
+.ant-skeleton-element .ant-skeleton-button {
+  background: linear-gradient(90deg, var(--paper-light) 25%, var(--paper-mid) 50%, var(--paper-light) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}
