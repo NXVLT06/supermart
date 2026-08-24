@@ -128,22 +128,46 @@ async function startServer() {
 
       // SSE — special raw streaming path
       if (pathname === '/api/events' && method === 'GET') {
-        rawRes.writeHead(200, {
-          'Content-Type':  'text/event-stream',
-          'Cache-Control': 'no-cache',
-          'Connection':    'keep-alive',
-          'Access-Control-Allow-Origin': '*',
-        });
         req.query = Object.fromEntries(parsedUrl.searchParams.entries());
         req.body  = {};
 
-        // Shim res.write and res.end for SSE
         const shimRes = {
-          write: (chunk) => rawRes.write(chunk),
-          end:   ()      => rawRes.end(),
-          setHeader: (k, v) => rawRes.setHeader(k, v),
-          status: () => shimRes,
-          set: () => shimRes,
+          write: (chunk) => {
+            if (!rawRes.headersSent) {
+              rawRes.writeHead(200, {
+                'Content-Type':  'text/event-stream',
+                'Cache-Control': 'no-cache, no-transform',
+                'Connection':    'keep-alive',
+                'Access-Control-Allow-Origin': '*',
+                'X-Accel-Buffering': 'no',
+              });
+            }
+            rawRes.write(chunk);
+          },
+          end: () => {
+            if (!rawRes.writableEnded) rawRes.end();
+          },
+          setHeader: (k, v) => {
+            if (!rawRes.headersSent) {
+              try { rawRes.setHeader(k, v); } catch {}
+            }
+          },
+          status: (c) => {
+            if (!rawRes.headersSent) rawRes.statusCode = c;
+            return shimRes;
+          },
+          set: (k, v) => {
+            if (!rawRes.headersSent) {
+              if (typeof k === 'object' && k !== null) {
+                Object.entries(k).forEach(([key, val]) => {
+                  try { rawRes.setHeader(key, val); } catch {}
+                });
+              } else {
+                try { rawRes.setHeader(k, v); } catch {}
+              }
+            }
+            return shimRes;
+          },
         };
         return eventsHandler(req, shimRes);
       }
